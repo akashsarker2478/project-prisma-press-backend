@@ -1,29 +1,48 @@
-import { Request, Response } from "express";
+import { NextFunction, Request, Response } from "express";
 import httpStatus from "http-status";
 import { userService } from "./user.service";
+import { catchAsync } from "../../utils/catchAsync";
 
-const registerUser = async (req: Request, res: Response) => {
-  try {
+
+type TMeta = {
+  page:number;
+  limit:number;
+  total:number;
+}
+
+type TResponseData <T> = {
+  success :boolean;
+  statusCode: number;
+  message:string;
+  data:T;
+  meta ?:TMeta
+}
+
+const sendResponse = <T>(res:Response,data:TResponseData<T>)=>{
+  res.status(data.statusCode).json({
+    success:data.success,
+    statusCode : data.statusCode,
+    message:data.message,
+    data:data.data,
+    meta:data.meta
+  })
+}
+
+const registerUser = catchAsync(
+  async (req: Request, res: Response, next: NextFunction) => {
     const payload = req.body;
-
     const user = await userService.registerUserIntoDB(payload);
 
-    res.status(httpStatus.CREATED).json({
-      success: true,
-      statusCode: httpStatus.CREATED,
-      message: "user created successfully",
-      data: {
-        user,
-      },
-    });
-  } catch (error: any) {
-    console.error("Register Error:", error);
-    return res.status(httpStatus.INTERNAL_SERVER_ERROR).json({
-      success: false,
-      message: error.message || "Something went wrong",
-    });
-  }
-};
+    sendResponse(res,{
+      success:true,
+      statusCode:httpStatus.CREATED,
+      message:"user created successfully",
+      data:{user}
+    })
+
+  
+  },
+);
 
 export const userController = {
   registerUser,
