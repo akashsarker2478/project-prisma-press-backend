@@ -56,6 +56,9 @@ The server will be running live at http://localhost:5000
 - put /api/users/my-profile - update user profile (Protected with Auth Middleware)
 ---
 
+## 🧪 API Testing
+You can import the Postman collection file `Prisma Press Backend.postman_collection.json` located in the root directory to test all endpoints.
+
 ## 🔒 Best Practices Implemented
 
 - Conventional Commits
