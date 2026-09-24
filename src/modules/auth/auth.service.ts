@@ -11,6 +11,10 @@ const loginUser = async (payload: ILoginUser) => {
     where: { email },
   });
 
+   if(user.activeStatus === "INACTIVE"){
+     throw new Error("your account is inactive. please contact support")
+   };
+
   const isPasswordMatched = await bcrypt.compare(password, user.password);
   if (!isPasswordMatched) {
     throw new Error("password is incorrect");
