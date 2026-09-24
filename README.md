@@ -54,6 +54,7 @@ The server will be running live at http://localhost:5000
 - POST /api/auth/login - Authenticate and log in a user
 - GET /api/users/me - Get logged-in user profile (Protected with Auth Middleware)
 - put /api/users/my-profile - update user profile (Protected with Auth Middleware)
+- post /api/auth/refresh-token - refresh token api
 ---
 
 ## 🧪 API Testing
