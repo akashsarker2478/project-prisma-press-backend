@@ -63,7 +63,41 @@ const getMyProfileFromDB = async(userId : string)=>{
   return user;
 }
 
+//update my profile
+ 
+const updateMyProfileFromDB = async(userId :string, payload:any)=>{
+  const {name,email,profilePhoto,bio} = payload;
+
+  //middleware already check  করে দিয়েছে যে user login কিনা . so নতুন করে আর check করার দরকার নেই 
+
+  const updatedUser =  await prisma.user.update({
+    where :{
+      id :userId
+    },
+    data :{
+      name,
+      email,
+      profile:{
+        update:{
+          profilePhoto,
+          bio
+        }
+      }
+    },
+    omit:{
+      password : true,
+    },
+
+    include:{
+      profile : true
+    }
+  })
+
+  return updatedUser;
+}
+
 export const userService = {
   registerUserIntoDB,
-  getMyProfileFromDB
+  getMyProfileFromDB,
+  updateMyProfileFromDB
 };
