@@ -52,7 +52,7 @@ The server will be running live at http://localhost:5000
 
 - POST /api/users/register - Register a new user with profile creation
 - POST /api/auth/login - Authenticate and log in a user
-
+- GET /api/users/me - Get logged-in user profile (Protected with Auth Middleware)
 ---
 
 ## 🔒 Best Practices Implemented
