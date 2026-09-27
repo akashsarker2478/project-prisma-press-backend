@@ -53,12 +53,16 @@ The server will be running live at http://localhost:5000
 - POST /api/users/register - Register a new user with profile creation
 - POST /api/auth/login - Authenticate and log in a user
 - GET /api/users/me - Get logged-in user profile (Protected with Auth Middleware)
-- put /api/users/my-profile - update user profile (Protected with Auth Middleware)
+- PUT /api/users/my-profile - update user profile (Protected with Auth Middleware)
 - POST /api/auth/refresh-token - refresh token api
 
 - POST /api/posts - create posts api
 
 - GET /api/posts - get all  posts api
+
+- GET /api/posts/:id - get posts by id api
+
+- GET /api/posts/my-posts - get my all posts api 
 ---
 
 ## 🧪 API Testing

@@ -13,23 +13,45 @@ const createPost = async (payload: ICreatePostPayload, userId: string) => {
 };
 
 const getAllPosts = async () => {
-    const posts = await prisma.post.findMany(
-        {
-            include : {
-                author: {
-                    omit:{
-                        password:true
-                    }
-                },
-                comments: true
-            }
-        }
-    );
+  const posts = await prisma.post.findMany({
+    include: {
+      author: {
+        omit: {
+          password: true,
+        },
+      },
+      comments: true,
+    },
+  });
 
-    return posts;
+  return posts;
 };
 
-const getPostById = async () => {};
+const getPostById = async (postId: string) => {
+  const updatePost = await prisma.post.update({
+    where: {
+      id: postId,
+    },
+    data: {
+      views: {
+        increment: 1,
+      },
+    },
+    include: {
+      author: {
+        omit: {
+          password: true,
+        },
+      },
+      comments: {
+        where: {
+          status: "APPROVED",
+        },
+      },
+    },
+  });
+  return updatePost;
+};
 
 const updatePost = async () => {};
 
@@ -37,7 +59,32 @@ const deletePost = async () => {};
 
 const getPostsStats = async () => {};
 
-const getMyPosts = async () => {};
+const getMyPosts = async (authorId: string) => {
+  const result = await prisma.post.findMany({
+    where: {
+      authorId,
+    },
+
+    orderBy: {
+      createdAt: "desc",
+    },
+    include: {
+      comments: true,
+      author: {
+        omit: {
+          password: true,
+        },
+      },
+      _count: {
+        select: {
+          comments: true,
+        },
+      },
+    },
+  });
+
+  return result;
+};
 
 export const postService = {
   createPost,
