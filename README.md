@@ -63,6 +63,10 @@ The server will be running live at http://localhost:5000
 - GET /api/posts/:id - get posts by id api
 
 - GET /api/posts/my-posts - get my all posts api 
+
+- PATCH /api/posts//:postId - update posts api
+
+- DELETE /api/posts//:postId - delete post api
 ---
 
 ## 🧪 API Testing
