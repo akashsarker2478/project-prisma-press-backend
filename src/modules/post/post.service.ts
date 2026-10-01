@@ -1,3 +1,5 @@
+import { totalmem } from "node:os";
+import { commentStatus, postStatus } from "../../../generated/prisma/enums";
 import { prisma } from "../../lib/prisma";
 import { ICreatePostPayload, IUpdatedPostPayload } from "./post.interface";
 
@@ -28,8 +30,51 @@ const getAllPosts = async () => {
 };
 
 const getPostById = async (postId: string) => {
-  const updatePost = await prisma.post.update({
-    where: {
+  // await prisma.post.update({
+  //   where: {
+  //     id: postId,
+  //   },
+  //   data: {
+  //     views: {
+  //       increment: 1,
+  //     },
+  //   },
+
+  // });
+
+  // const post = await prisma.post.findUniqueOrThrow({
+  //   where :{
+  //     id :postId
+  //   },
+  //   include :{
+  //     author:{
+  //       omit:{
+  //         password :true
+  //       },
+
+  //     },
+  //     comments:{
+  //       where :{
+  //         status :commentStatus.APPROVED
+  //       },
+  //       orderBy :{
+  //         createdAt:"desc"
+  //       }
+  //     },
+  //     _count:{
+  //       select:{
+  //         comments:true
+  //       }
+  //     }
+  //   }
+  // })
+  // return post;
+
+const transactionResult = await prisma.$transaction(
+
+  async(tx)=>{
+    await tx.post.update({
+      where: {
       id: postId,
     },
     data: {
@@ -37,20 +82,38 @@ const getPostById = async (postId: string) => {
         increment: 1,
       },
     },
-    include: {
-      author: {
-        omit: {
-          password: true,
-        },
-      },
-      comments: {
-        where: {
-          status: "APPROVED",
-        },
-      },
+    });
+
+     const post = await tx.post.findUniqueOrThrow({
+    where :{
+      id :postId
     },
-  });
-  return updatePost;
+    include :{
+      author:{
+        omit:{
+          password :true
+        },
+
+      },
+      comments:{
+        where :{
+          status :commentStatus.APPROVED
+        },
+        orderBy :{
+          createdAt:"desc"
+        }
+      },
+      _count:{
+        select:{
+          comments:true
+        }
+      }
+    }
+  })
+  return post;
+  }
+)
+return transactionResult;
 };
 
 const updatePost = async (postId:string,payload:IUpdatedPostPayload,authorId:string,isAdmin:boolean) => {
@@ -100,7 +163,61 @@ const deletePost = async (postId:string,authorId:string,isAdmin:boolean) => {
     
 };
 
-const getPostsStats = async () => {};
+const getPostsStats = async () => {
+  const transactionResult = await prisma.$transaction(
+    async(tx)=>{
+      const totalPosts = await tx.post.count();
+
+      const totalPublishedPost = await tx.post.count({
+        where:{
+          status:postStatus.PUBLISHED
+        }
+      })
+      const totalDraftPost = await tx.post.count({
+        where:{
+          status:postStatus.DRAFT
+        }
+      })
+      const totalArchivedPost = await tx.post.count({
+        where:{
+          status:postStatus.ARCHIVED
+        }
+      })
+
+      const totalComments = await tx.comment.count();
+      const totalApprovedComments = await tx.comment.count({
+        where:{
+          status :commentStatus.APPROVED
+        }
+      })
+      const totalRejectedComments = await tx.comment.count({
+        where:{
+          status :commentStatus.REJECT
+        }
+      });
+
+      const totalPostViewsAggregate =  await tx.post.aggregate({
+        _sum:{
+          views:true
+        }
+      })
+
+      const totalPostViews = totalPostViewsAggregate._sum.views
+
+      return {
+        totalPosts,
+        totalPublishedPost,
+        totalDraftPost,
+        totalArchivedPost,
+        totalComments,
+        totalApprovedComments,
+        totalRejectedComments,
+        totalPostViews
+      }
+    }
+  )
+  return transactionResult;
+};
 
 const getMyPosts = async (authorId: string) => {
   const result = await prisma.post.findMany({

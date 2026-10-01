@@ -67,6 +67,8 @@ The server will be running live at http://localhost:5000
 - PATCH /api/posts//:postId - update posts api
 
 - DELETE /api/posts//:postId - delete post api
+
+- GET /api/posts/stats - Get overall post, comment, and view statistics (Admin only).
 ---
 
 ## 🧪 API Testing
