@@ -57,19 +57,19 @@ The server will be running live at http://localhost:5000
 - POST /api/auth/refresh-token - refresh token api
 
 - POST /api/posts - create posts api
-
-- GET /api/posts - get all  posts api
-
+- GET /api/posts - get all posts api
 - GET /api/posts/:id - get posts by id api
-
 - GET /api/posts/my-posts - get my all posts api 
+- PATCH /api/posts/:postId - update posts api
+- DELETE /api/posts/:postId - delete post api
+- GET /api/posts/stats - Get overall post, comment, and view statistics (Admin only)
 
-- PATCH /api/posts//:postId - update posts api
-
-- DELETE /api/posts//:postId - delete post api
-
-- GET /api/posts/stats - Get overall post, comment, and view statistics (Admin only).
----
+- POST /api/comments - Create a new comment (USER, ADMIN, AUTHOR)
+- GET /api/comments/author/:authorId - Get all comments by a specific author
+- GET /api/comments/:commentId - Get comment by ID
+- PATCH /api/comments/:commentId - Update comment content by author (USER, ADMIN, AUTHOR)
+- DELETE /api/comments/:commentId - Delete comment by author (USER, ADMIN, AUTHOR)
+- PUT /api/comments/:commentId/moderate - Moderate comment status (Admin only)
 
 ## 🧪 API Testing
 You can import the Postman collection file `Prisma Press Backend.postman_collection.json` located in the root directory to test all endpoints.
