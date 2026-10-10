@@ -57,7 +57,16 @@ The server will be running live at http://localhost:5000
 - POST /api/auth/refresh-token - refresh token api
 
 - POST /api/posts - create posts api
-- GET /api/posts - get all posts api
+- GET /api/posts - get all posts api(Supports Pagination, Filtering, Search & Sorting)
+* **Query Parameters:**
+    - `page` (number): Page number for pagination (e.g., `?page=1`)
+    - `limit` (number): Number of items per page (e.g., `?limit=10`)
+    - `searchTerm` (string): Search across title and content (e.g., `?searchTerm=react`)
+    - `title` (string): Filter by exact title match (e.g., `?title=My First Post`)
+    - `content` (string): Filter by content match
+    - `sortBy` (string): Sort field e.g., `createdAt`, `title` (default: `createdAt`)
+    - `sortOrder` (string): Sort direction `asc` or `desc` (default: `desc`)
+    
 - GET /api/posts/:id - get posts by id api
 - GET /api/posts/my-posts - get my all posts api 
 - PATCH /api/posts/:postId - update posts api
