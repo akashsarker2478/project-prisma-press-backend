@@ -64,8 +64,13 @@ The server will be running live at http://localhost:5000
     - `searchTerm` (string): Search across title and content (e.g., `?searchTerm=react`)
     - `title` (string): Filter by exact title match (e.g., `?title=My First Post`)
     - `content` (string): Filter by content match
+    - `authorId` (string): Filter posts by specific author ID (e.g., `?authorId=123`)
+    - `isFeatured` (boolean): Filter featured posts (e.g., `?isFeatured=true`)
+    - `tags` (string[]): Filter posts by tags (e.g., `?tags=nodejs,prisma`)
+    - `status` (string): Filter by post status (e.g., `?status=PUBLISHED`)
     - `sortBy` (string): Sort field e.g., `createdAt`, `title` (default: `createdAt`)
     - `sortOrder` (string): Sort direction `asc` or `desc` (default: `desc`)
+    
     
 - GET /api/posts/:id - get posts by id api
 - GET /api/posts/my-posts - get my all posts api 
