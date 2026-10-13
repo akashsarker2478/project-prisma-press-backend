@@ -107,6 +107,7 @@ Supported error responses include:
   "message": "Duplicate Key Error",
   "error": "..."
 }
+```
 
 ## 🧪 API Testing
 You can import the Postman collection file `Prisma Press Backend.postman_collection.json` located in the root directory to test all endpoints.
