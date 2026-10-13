@@ -85,6 +85,29 @@ The server will be running live at http://localhost:5000
 - DELETE /api/comments/:commentId - Delete comment by author (USER, ADMIN, AUTHOR)
 - PUT /api/comments/:commentId/moderate - Moderate comment status (Admin only)
 
+## 🛠️ Error Handling
+
+This project uses a centralized global error-handling middleware to catch and standardize all errors, preventing raw stack traces from reaching the client.
+
+Supported error responses include:
+- **Prisma Client Validation Errors:** Handled with status code `400` for missing or incorrect fields.
+- **Prisma Known Request Errors:** 
+  - `P2002`: Duplicate key error (e.g., unique constraint violations like existing email).
+  - `P2003`: Foreign key constraint failures.
+  - `P2005 / P2025`: Record not found errors.
+- **Internal Server Errors:** Handled gracefully with status code `500`.
+
+### Error Response Format:
+```json
+{
+  "success": false,
+  "statusCode": 400,
+  "errorCode": "P2002",
+  "name": "PrismaClientKnownRequestError",
+  "message": "Duplicate Key Error",
+  "error": "..."
+}
+
 ## 🧪 API Testing
 You can import the Postman collection file `Prisma Press Backend.postman_collection.json` located in the root directory to test all endpoints.
 
